@@ -10,6 +10,8 @@
         "waist": 1,
         "hip": 1,
         "thigh": 1,
+        "foot": 1,
+        "hand": 1,
         "fatness": 1
     },
     {
@@ -23,6 +25,8 @@
         "waist": 0.9,
         "hip": 0.9,
         "thigh": 0.9,
+        "foot": 1,
+        "hand": 1,
         "fatness": 0.8
     },
     {
@@ -36,6 +40,8 @@
         "waist": 1.1,
         "hip": 1.1,
         "thigh": 1.1,
+        "foot": 1,
+        "hand": 1,
         "fatness": 1.1
     },
     {
@@ -49,6 +55,8 @@
         "waist": 0.6,
         "hip": 0.6,
         "thigh": 0.6,
+        "foot": 1,
+        "hand": 1,
         "fatness": 1
     },
     {

@@ -8,54 +8,42 @@
 //=============================================================================
 
 /*:
- * @plugindesc SAN_ActorBodysizeReactor ver2.12
- * @author Sanshiro https://twitter.com/rev2nym
- * 
- * @help
- * It's possible to commercial use, distribute, and modify under the MIT license.
- * But, don't eliminate and don't alter a comment of the beginning.
- * If it's good, please indicate an author name on credit.
- * 
- * Author doesn't shoulder any responsibility in all kind of damage by using this.
- * And please don't expect support. X(
- *
- * 日本語ヘルプはプラグインファイルをご覧ください。
+ * @plugindesc アクターボディサイズリアクター ver2.1.3
+ * 職業、装備、スキル、ステートからボディサイズを算出します。
+ * @author サンシロ https://twitter.com/rev2nym
  * 
  * @param MaleAverageHeight
- * @desc Average height of adult male. [cm]
+ * @desc 成人男性の平均身長[cm]です。
+ * 計算結果には若干の誤差が発生します。
  * @default 170.8
  * 
  * @param FemaleAverageHeight
- * @desc Average height of adult female. [cm]
+ * @desc 成人女性の平均身長[cm]です。
+ * 計算結果には若干の誤差が発生します。
  * @default 158.1
  * 
- */
-
-/*:ja
- * @plugindesc アクターボディサイズリアクター ver2.12
- * 職業、装備、スキル、ステートからボディサイズを算出します。
- * @author サンシロ https://twitter.com/rev2nym
- * @version 2.12 2016/07/16 職業等の変化がボディサイズに反映されない不具合を修正。
- * 2.11 2016/07/16 ディレクトリパスに'www'が含まれるとエディタシーンのセーブ時にエラー終了する不具合を修正。
- * 2.10 2016/07/07 足長と手長を追加。平均身長設定プラグインパラメータ追加。
- * 2.00 2016/07/01 エディタ機能追加。
- * 1.00 2016/06/28 公開。
- * 
  * @help
+ * ■概要
  * このプラグインには以下の2つの機能を実装しています。
  *
- * 1. ボディサイズ反映機能
- * アクターに性別、年齢、身長、体重、スリーサイズ等のパラメータを追加し、
- * それらボディサイズに職業、装備、スキル、ステートを反映する機能です。
+ *   ・ボディサイズ反映機能
+ *     アクターに性別、年齢、身長、体重、スリーサイズ等のパラメータを追加し、
+ *     それらボディサイズに職業、装備、スキル、ステートを反映する機能です。
  *
- * 2. データ編集機能
- * ボディサイズ反映機能のデータを編集する機能です。
- *
- * プロジェクトのdataフォルダに以下のJSONファイルを保存してください。
+ *   ・データ編集機能
+ *     ボディサイズ反映機能のデータを編集する機能です。
+ * 
+ * 
+ * ■追加データベースファイル
+ * このプラグインは追加のデータベースファイルを使用します。
+ * 追加データベースファイルは次のJSONファイルです。
+ * 
  *   SAN_ActorBodysizeReactor.json
- * このJSONファイルはプラグインと併せて公開されます。
+ * 
+ * このJSONファイルをプロジェクトのdataフォルダ内に配置してください。
+ * 追加データベースファイルはプラグインと併せて公開されます。
  *
- * 1. ボディサイズ反映機能
+ * ■ボディサイズ反映機能
  * アクター、職業、装備、スキル、ステートに設定したパラメータセットから
  * ボディサイズを算出します。パラメータは上書きマージされ、
  * 適用優先度の高いパラメータがボディサイズの算出に採用されます。
@@ -71,30 +59,21 @@
  * "name" : パラメータセットのデータの名称です。
  *          データの内容は上記JSONファイルに記述されます。
  *
- * 2. データ編集機能
+ * ■データ編集機能
  * ボディサイズ反映機能で使用するデータをゲーム上で編集します。
  * 以下のプラグインコマンドを実行してください。
+ * 
  *   SAN_ActorBodysizeReactor CallEditor
+ * 
  * データの保存や削除はローカルモード時（テスト実行時やexe実行時）のみ可能です。
  * 
- * 
+ * ■利用規約
  * MITライセンスのもと、商用利用、改変、再配布が可能です。
  * ただし冒頭のコメントは削除や改変をしないでください。
  * よかったらクレジットに作者名を記載してください。
  * 
  * これを利用したことによるいかなる損害にも作者は責任を負いません。
  * サポートは期待しないでください＞＜。
- * 
- * @param MaleAverageHeight
- * @desc 成人男性の平均身長[cm]です。
- * 計算結果には若干の誤差が発生します。
- * @default 170.8
- * 
- * @param FemaleAverageHeight
- * @desc 成人女性の平均身長[cm]です。
- * 計算結果には若干の誤差が発生します。
- * @default 158.1
- * 
  */
 
 var Imported = Imported || {};
@@ -102,7 +81,7 @@ Imported.SAN_ActorBodysizeReactor = true;
 
 var Sanshiro = Sanshiro || {};
 Sanshiro.ActorBodysizeReactor = Sanshiro.ActorBodysizeReactor || {};
-Sanshiro.ActorBodysizeReactor.version = '2.12';
+Sanshiro.ActorBodysizeReactor.version = '2.1.3';
 
 (function (SAN) {
 'use strict';
@@ -1103,13 +1082,13 @@ Scene_ActorBodysizeEditor.prototype.saveDatabaseFile = function(name, json) {
         var fs = require('fs');
         var dirPath = this.databaseDirectoryPath();
         var filePath = name + '.json';
-        fs.writeFileSync(dirPath + filePath, JSON.stringify(json, null, '    '));
+        fs.writeFileSync(dirPath + '/' + filePath, JSON.stringify(json, null, '    '));
     }
 };
 
 // データベースファイルディレクトリ
 Scene_ActorBodysizeEditor.prototype.databaseDirectoryPath = function() {
-    var path = window.location.pathname.replace(/\/[^\/]*$/, '/data/');
+    var path = window.location.pathname.replace(/\/[^\/]*$/, './data');
     if (path.match(/^\/([A-Z]\:)/)) {
         path = path.slice(1);
     }
