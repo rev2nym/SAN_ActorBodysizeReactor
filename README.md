@@ -12,7 +12,7 @@
 ボディサイズ反映機能のデータを編集する機能です。
 
 ## サンプルプロジェクト
-次のダウンロードリンクからzipファイルをダウンロードして
+次のダウンロードリンクからzipファイルをダウンロードして展開後に
 新規プロジェクトに上書き保存してください。
 https://github.com/rev2nym/SAN_ActorBodysizeReactor/archive/master.zip
 
